@@ -13,19 +13,21 @@ type PacketSniffer struct {
 
 	// Interface device  configuration
 	//  eth0 or eth1 .. in linux env or en0 or en1 in mac env or in windows like `\Device\NPF_{D2C88C00-9B67-4D86-A424-4A79F2845D43}`
-	iface       string
-	promiscuous bool
-	timeout     time.Duration
-	snaplen     int32
+	Iface       string
+	Promiscuous bool
+	Timeout     time.Duration
+	Snaplen     int32
+	Filter      string
 }
 
-func NewPacketSniffer(ifaceName string) *PacketSniffer {
+func NewPacketSniffer(ifaceName, filter string) *PacketSniffer {
 
 	return &PacketSniffer{
-		iface:       ifaceName, // Choose a network interface to capture packets from
-		promiscuous: true,
-		timeout:     pcap.BlockForever,
-		snaplen:     65536, // Capture entire packet
+		Iface:       ifaceName, // Choose a network interface to capture packets from
+		Promiscuous: true,
+		Timeout:     pcap.BlockForever,
+		Snaplen:     65536,  // Capture entire packet
+		Filter:      filter, // Filtering Packets by Protocol
 
 	}
 

@@ -6,22 +6,28 @@ import (
 	"log"
 
 	"github.com/google/gopacket/pcap"
+	"github.com/khaledibrahim1015/goShark-packetAnalyzer/internal"
+	"github.com/khaledibrahim1015/goShark-packetAnalyzer/models"
 )
 
 type CommandFlags struct {
-	listDevs     bool
-	interfaceDev string
+	listDevs  bool
+	ifaceName string
+	filetr    string
 }
 
 func ExecuteCmd() *CommandFlags {
 
 	listInterfaceNetworkDevs := flag.Bool("listIfaceDevs", false, "list all interface network devices on machine ")
-	interfaceDevice := flag.String("interfaceDevice", "", "Choose a network interface to capture packets from")
+	ifaceName := flag.String("interfaceDevice", "", "Choose a network interface to capture packets from")
+	filterProtocol := flag.String("filter", "", "Filtering Packets by Protocol")
+
 	flag.Parse()
 
 	return &CommandFlags{
-		listDevs:     *listInterfaceNetworkDevs,
-		interfaceDev: *interfaceDevice,
+		listDevs:  *listInterfaceNetworkDevs,
+		ifaceName: *ifaceName,
+		filetr:    *filterProtocol,
 	}
 
 }
@@ -33,8 +39,8 @@ func main() {
 		FindAllInterfacesDevices()
 	}
 
-	// 	cmd := ExecuteCmd()
-	// 	packetSniffer := models.NewPacketSniffer(cmd.interfaceDev)
+	packetSnifInfo := models.NewPacketSniffer(cmd.ifaceName, cmd.filetr)
+	internal.CapturePackets(packetSnifInfo)
 
 	// fmt.Println("goshark packet sniffer && analyzer ")
 
